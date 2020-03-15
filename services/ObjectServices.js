@@ -84,6 +84,7 @@ const listObjects = async (filterOptions, pageIndex, perPage) => {
         advertType: 'advert_type',
         district: 'district',
         property_pype: 'realty_type',
+        objectId: 'local_realty_id'
     }
 
     const findObject = {};
