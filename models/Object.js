@@ -15,6 +15,7 @@ const objectShema = new Schema({
     title: String,
     description: String,
     photos_urls: Array,
+    created_at: String,
     wall_type: String,
     rooms_count: Number,
     total_area: Number,

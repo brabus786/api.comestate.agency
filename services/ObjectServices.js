@@ -22,7 +22,7 @@ const uploadObjectsToDB = async (crmObjectsJson) => {
     const arrObj = [];
     for (let i = 0; i < realties.length; i++) {
 
-       //console.log(realties[i].price._attributes.currency);
+       console.log(realties[i].created_at._text);
 
         const arr = realties[i].images.image_url;
         const arrIMG = [];
@@ -52,6 +52,7 @@ const uploadObjectsToDB = async (crmObjectsJson) => {
              title: realties[i].title._text,
              description: realties[i].description._text,
              photos_urls: arrIMG,
+             created_at: realties[i].created_at._text,
              wall_type: null,
              rooms_count: null,
              total_area: area,
