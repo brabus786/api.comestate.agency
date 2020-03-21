@@ -35,13 +35,21 @@ router.get('/object', async function (req, res) {
     objectServices.addView(req.query.id);
     const object = await objectServices.listOneObject(req.query.id); 
     res.send(object);
-})
+});
 
 router.get('/similar', async function (req, res) {
     const object = await objectServices.listSimilarbject(req.query.price)
     console.log(object.length)
     res.send(object);
+});
+
+router.get('/sitemap', async function(req, res){
+    let xml = await objectServices.getXml();
+    res.set('Content-Type', 'text/xml');
+    res.send(xml);
 })
+
+
 
 module.exports = router;
 

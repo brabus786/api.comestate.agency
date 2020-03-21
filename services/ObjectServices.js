@@ -22,7 +22,7 @@ const uploadObjectsToDB = async (crmObjectsJson) => {
     const arrObj = [];
     for (let i = 0; i < realties.length; i++) {
 
-       console.log(realties[i].created_at._text);
+        console.log(realties[i].created_at._text);
 
         const arr = realties[i].images.image_url;
         const arrIMG = [];
@@ -36,32 +36,32 @@ const uploadObjectsToDB = async (crmObjectsJson) => {
 
         // console.log(realties[i]);
 
-        const price = realties[i].price? parseInt(realties[i].price._text) : null;
-        const area = realties[i].area_total? parseInt(realties[i].area_total._text) : null;
+        const price = realties[i].price ? parseInt(realties[i].price._text) : null;
+        const area = realties[i].area_total ? parseInt(realties[i].area_total._text) : null;
 
         const obj = {
-             local_realty_id:realties[i]._attributes['internal-id'],
-             realty_type: realties[i].realty_type._text,
-             advert_type: realties[i].deal._text,
-             state: realties[i].location.region._text,
-             city: realties[i].location.city._text,
-             district: realties[i].location.district._text,
-             street: realties[i].location.street._text,
-             longitude: realties[i].location.map_lng != undefined? realties[i].location.map_lng._text: null,
-             latitude: realties[i].location.map_lat != undefined? realties[i].location.map_lat._text: null,
-             title: realties[i].title._text,
-             description: realties[i].description._text,
-             photos_urls: arrIMG,
-             created_at: realties[i].created_at._text,
-             wall_type: null,
-             rooms_count: null,
-             total_area: area,
-             floor: realties[i].floor ? parseInt(realties[i].floor._text) : null,
-             floors: realties[i].total_floors ? parseInt(realties[i].total_floors._text) : null,
-             price: price,
-             price_type: null,
-             currency: realties[i].price._attributes.currency,
-             pricePerSqure: Math.round(price / area)
+            local_realty_id: realties[i]._attributes['internal-id'],
+            realty_type: realties[i].realty_type._text,
+            advert_type: realties[i].deal._text,
+            state: realties[i].location.region._text,
+            city: realties[i].location.city._text,
+            district: realties[i].location.district._text,
+            street: realties[i].location.street._text,
+            longitude: realties[i].location.map_lng != undefined ? realties[i].location.map_lng._text : null,
+            latitude: realties[i].location.map_lat != undefined ? realties[i].location.map_lat._text : null,
+            title: realties[i].title._text,
+            description: realties[i].description._text,
+            photos_urls: arrIMG,
+            created_at: realties[i].created_at._text,
+            wall_type: null,
+            rooms_count: null,
+            total_area: area,
+            floor: realties[i].floor ? parseInt(realties[i].floor._text) : null,
+            floors: realties[i].total_floors ? parseInt(realties[i].total_floors._text) : null,
+            price: price,
+            price_type: null,
+            currency: realties[i].price._attributes.currency,
+            pricePerSqure: Math.round(price / area)
         }
 
 
@@ -124,7 +124,7 @@ const listObjects = async (filterOptions, pageIndex, perPage) => {
 
 
     const sort = filterOptions.sort ? filterOptions.sort : 'local_realty_id';
-    
+
 
 
     const objects = await ObjectModel.find(findObject)
@@ -132,7 +132,7 @@ const listObjects = async (filterOptions, pageIndex, perPage) => {
         .limit(perPage)
         .sort(sort)
         .exec();
-    
+
     console.log(findObject);
 
     const objectsCount = await ObjectModel.count(findObject);
@@ -195,6 +195,29 @@ const addView = async (id) => {
 }
 
 
+
+const getXml = async () => {
+    const allId = await ObjectModel.find(null, 'local_realty_id created_at');
+
+    let xml = '';
+    for (let i = 0; i < allId.length; i++) {
+        let create = allId[i].created_at.split('T')
+        xml += `
+                <url>
+                    <loc>https://comestate.agency/object?id=${allId[i].local_realty_id}</loc>
+                    <lastmod>${create[0]}</lastmod>
+                </url>
+               `
+    }
+
+    return (`
+            <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+                ${xml}
+            </urlset>    
+    `)
+}
+
+
 module.exports = {
     resaltFilterInfo,
     uploadObjectsToDB,
@@ -203,5 +226,6 @@ module.exports = {
     listOneObject,
     listSimilarbject,
     addView,
-    clearObjects
+    clearObjects,
+    getXml
 };
