@@ -22,7 +22,7 @@ const uploadObjectsToDB = async (crmObjectsJson) => {
     const arrObj = [];
     for (let i = 0; i < realties.length; i++) {
 
-        console.log(realties[i].created_at._text);
+        // console.log(realties[i].created_at._text);
 
         const arr = realties[i].images.image_url;
         const arrIMG = [];
@@ -83,7 +83,7 @@ const listObjects = async (filterOptions, pageIndex, perPage) => {
     console.log(filterOptions);
     const filterMap = {
         advertType: 'advert_type',
-        district: 'district',
+        // district: 'district',
         property_pype: 'realty_type',
         objectId: 'local_realty_id'
     }
@@ -96,6 +96,9 @@ const listObjects = async (filterOptions, pageIndex, perPage) => {
         }
 
         switch (key) {
+            case 'district':
+                findObject.district = {$in: JSON.parse(filterOptions.district)}
+                break;
             case 'priceObjectTo':
                 findObject.price = { ...findObject.price, $lt: filterOptions[key] }
                 break;
@@ -133,7 +136,7 @@ const listObjects = async (filterOptions, pageIndex, perPage) => {
         .sort(sort)
         .exec();
 
-    console.log(findObject);
+    console.log('Filtring Object', findObject);
 
     const objectsCount = await ObjectModel.count(findObject);
 
