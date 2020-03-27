@@ -2,6 +2,16 @@ const axios = require('axios');
 const convert = require('xml-js');
 const ObjectModel = require('../models/Object');
 
+
+
+
+const getTotalCount = async () => {
+    const TotalCount = await ObjectModel.countDocuments();
+   // console.log(TotalCount + ' moy ');
+    return TotalCount;
+}
+
+
 const getObjectsFromCRM = () => {
     return axios.get('https://crm-alice-kharkiv.realtsoft.net/feed/xml?id=5')
         .then(function (response) {
@@ -80,7 +90,7 @@ const uploadObjectsToDB = async (crmObjectsJson) => {
 
 
 const listObjects = async (filterOptions, pageIndex, perPage) => {
-    console.log(filterOptions);
+   // console.log(filterOptions);
     const filterMap = {
         advertType: 'advert_type',
         // district: 'district',
@@ -136,11 +146,11 @@ const listObjects = async (filterOptions, pageIndex, perPage) => {
         .sort(sort)
         .exec();
 
-    console.log('Filtring Object', findObject);
+    //console.log('Filtring Object', findObject);
 
     const objectsCount = await ObjectModel.count(findObject);
 
-    console.log(objectsCount);
+    //console.log(objectsCount);
 
     return {
         meta: {
@@ -194,7 +204,7 @@ const addView = async (id) => {
     const views = await ObjectModel.findOne({ local_realty_id: id });
     const viewsCalc = views.views == undefined ? 0 + 1 : views.views + 1;
     await ObjectModel.updateOne({ local_realty_id: id }, { views: viewsCalc });
-    console.log(viewsCalc);
+    //console.log(viewsCalc);
 }
 
 
@@ -230,5 +240,6 @@ module.exports = {
     listSimilarbject,
     addView,
     clearObjects,
-    getXml
+    getXml,
+    getTotalCount,
 };

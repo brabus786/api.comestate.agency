@@ -14,7 +14,7 @@ router.get('/getCrm', async function (req, res) {
     objectServices.clearObjects();
     objectServices.uploadObjectsToDB(result);
     res.send(result);
-    console.log('finish')
+   console.log('finish')
 
 })
 
@@ -49,7 +49,11 @@ router.get('/sitemap', async function(req, res){
     res.send(xml);
 })
 
-
+router.get('/totalcount',async function(req, res){
+    const getTotalCount = await objectServices.getTotalCount();
+    //console.log(getTotalCount);
+    res.send(getTotalCount);
+})
 
 module.exports = router;
 
