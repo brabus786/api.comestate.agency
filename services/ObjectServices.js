@@ -32,7 +32,24 @@ const uploadObjectsToDB = async (crmObjectsJson) => {
     const arrObj = [];
     for (let i = 0; i < realties.length; i++) {
 
-        // console.log(realties[i].created_at._text);
+        let properties = realties[i].properties.property?realties[i].properties.property:[]; 
+        console.log(properties.length);
+
+        let metroStation = '';
+        let distanceToMetro = '';
+        let tenants = '';
+        let rentalYield = '';
+
+        for(let y = 0; y < properties.length; y++){
+            let attribute = properties[y]._attributes.attribute;
+            if(attribute == 'property_51') metroStation = properties[y]._text;
+            if(attribute == 'property_52') distanceToMetro = properties[y]._text;
+            if(attribute == 'property_53') tenants = properties[y]._text;
+            if(attribute == 'property_54') rentalYield = properties[y]._text;
+        }
+        
+        console.log(metroStation + ' - ' + distanceToMetro + ' - ' + tenants + ' - ' + rentalYield);
+        
 
         const arr = realties[i].images.image_url;
         const arrIMG = [];
@@ -62,6 +79,10 @@ const uploadObjectsToDB = async (crmObjectsJson) => {
             title: realties[i].title._text,
             description: realties[i].description._text,
             photos_urls: arrIMG,
+            metro_station: metroStation, //название метро
+            distance_to_metro:distanceToMetro, //расстояние до метро
+            tenants:tenants, // есть арендаторы
+            rental_yield:rentalYield, // рентабельность
             created_at: realties[i].created_at._text,
             wall_type: null,
             rooms_count: null,
@@ -188,6 +209,12 @@ const resaltFilterInfo = async () => {
     const city = await ObjectModel.distinct('city').exec();
     const advert_type = await ObjectModel.distinct('advert_type').exec();
     const wall_type = await ObjectModel.distinct('wall_type').exec();
+    const metro_station = await ObjectModel.distinct('metro_station').exec();
+    const distance_to_metro = await ObjectModel.distinct('distance_to_metro').exec();
+    const tenants = await ObjectModel.distinct('tenants').exec();
+    const rental_yield = await ObjectModel.distinct('rental_yield').exec();
+
+    console.log(metro_station);
 
     const resalt = {
         district: district,
@@ -195,6 +222,10 @@ const resaltFilterInfo = async () => {
         city: city,
         advert_type: advert_type,
         wall_type: wall_type,
+        metro_station: metro_station,
+        distance_to_metro: distance_to_metro,
+        tenants: tenants,
+        rental_yield: rental_yield,
     };
     return resalt;
 }

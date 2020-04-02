@@ -4,7 +4,7 @@ const objectServices = require('../services/ObjectServices');
 
 router.get('/filterInfo', async function (req, res) {
     const resaltFilterInfo = await objectServices.resaltFilterInfo();
-    console.log(resaltFilterInfo);
+    //console.log(resaltFilterInfo);
     res.send(resaltFilterInfo);
 })
 
@@ -39,7 +39,7 @@ router.get('/object', async function (req, res) {
 
 router.get('/similar', async function (req, res) {
     const object = await objectServices.listSimilarbject(req.query.price)
-    console.log(object.length)
+    //console.log(object.length)
     res.send(object);
 });
 
