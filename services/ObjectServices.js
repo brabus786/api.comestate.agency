@@ -7,7 +7,7 @@ const ObjectModel = require('../models/Object');
 
 const getTotalCount = async () => {
     const TotalCount = await ObjectModel.countDocuments();
-   // console.log(TotalCount + ' moy ');
+    // console.log(TotalCount + ' moy ');
     return TotalCount;
 }
 
@@ -32,7 +32,7 @@ const uploadObjectsToDB = async (crmObjectsJson) => {
     const arrObj = [];
     for (let i = 0; i < realties.length; i++) {
 
-        let properties = realties[i].properties.property?realties[i].properties.property:[]; 
+        let properties = realties[i].properties.property ? realties[i].properties.property : [];
         console.log(properties.length);
 
         let metroStation = '';
@@ -40,16 +40,16 @@ const uploadObjectsToDB = async (crmObjectsJson) => {
         let tenants = '';
         let rentalYield = '';
 
-        for(let y = 0; y < properties.length; y++){
+        for (let y = 0; y < properties.length; y++) {
             let attribute = properties[y]._attributes.attribute;
-            if(attribute == 'property_51') metroStation = properties[y]._text;
-            if(attribute == 'property_52') distanceToMetro = properties[y]._text;
-            if(attribute == 'property_53') tenants = properties[y]._text;
-            if(attribute == 'property_54') rentalYield = properties[y]._text;
+            if (attribute == 'property_51') metroStation = properties[y]._text;
+            if (attribute == 'property_52') distanceToMetro = parseInt(properties[y]._text.match(/\d+/));
+            if (attribute == 'property_53') tenants = properties[y]._text;
+            if (attribute == 'property_54') rentalYield = properties[y]._text;
         }
-        
-        console.log(metroStation + ' - ' + distanceToMetro + ' - ' + tenants + ' - ' + rentalYield);
-        
+
+        console.log(distanceToMetro);
+
 
         const arr = realties[i].images.image_url;
         const arrIMG = [];
@@ -80,9 +80,9 @@ const uploadObjectsToDB = async (crmObjectsJson) => {
             description: realties[i].description._text,
             photos_urls: arrIMG,
             metro_station: metroStation, //название метро
-            distance_to_metro:distanceToMetro, //расстояние до метро
-            tenants:tenants, // есть арендаторы
-            rental_yield:rentalYield, // рентабельность
+            distance_to_metro: distanceToMetro, //расстояние до метро
+            tenants: tenants, // есть арендаторы
+            rental_yield: rentalYield, // рентабельность
             created_at: realties[i].created_at._text,
             wall_type: null,
             rooms_count: null,
@@ -111,14 +111,13 @@ const uploadObjectsToDB = async (crmObjectsJson) => {
 
 
 const listObjects = async (filterOptions, pageIndex, perPage) => {
-   // console.log(filterOptions);
+    // console.log(filterOptions);
     const filterMap = {
         advertType: 'advert_type',
-        // district: 'district',
         property_pype: 'realty_type',
         objectId: 'local_realty_id'
     }
-
+    console.log(filterOptions);
     const findObject = {};
     for (let key in filterOptions) {
         const dbKeyName = filterMap[key]
@@ -128,7 +127,17 @@ const listObjects = async (filterOptions, pageIndex, perPage) => {
 
         switch (key) {
             case 'district':
-                findObject.district = {$in: JSON.parse(filterOptions.district)}
+                findObject.district = { $in: filterOptions.district }
+                break;
+            case 'subway':
+                console.log(filterOptions.subway);
+                findObject.metro_station = { $in: filterOptions.subway }
+                break;
+            case 'subwayDistance':
+                console.log(parseInt(filterOptions.subwayDistance));
+                findObject.distance_to_metro = { $lte:  parseInt(filterOptions.subwayDistance)};
+
+
                 break;
             case 'priceObjectTo':
                 findObject.price = { ...findObject.price, $lt: filterOptions[key] }
@@ -214,7 +223,6 @@ const resaltFilterInfo = async () => {
     const tenants = await ObjectModel.distinct('tenants').exec();
     const rental_yield = await ObjectModel.distinct('rental_yield').exec();
 
-    console.log(metro_station);
 
     const resalt = {
         district: district,

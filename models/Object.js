@@ -16,7 +16,7 @@ const objectShema = new Schema({
     description: String,
     photos_urls: Array,
     metro_station: String, //название метро
-    distance_to_metro:String, //расстояние до метро
+    distance_to_metro:Number, //расстояние до метро
     tenants:String, // есть арендаторы
     rental_yield:String, // рентабельность
     created_at: String,
