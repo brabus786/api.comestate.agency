@@ -110,6 +110,7 @@ const uploadObjectsToDB = async (crmObjectsJson) => {
 }
 
 
+
 const listObjects = async (filterOptions, pageIndex, perPage) => {
     // console.log(filterOptions);
     const filterMap = {
@@ -136,14 +137,19 @@ const listObjects = async (filterOptions, pageIndex, perPage) => {
             case 'subwayDistance':
                 console.log(parseInt(filterOptions.subwayDistance));
                 findObject.distance_to_metro = { $lte:  parseInt(filterOptions.subwayDistance)};
-
-
+                break;
+            case 'tenants':
+                findObject.tenants = 'Да';
                 break;
             case 'priceObjectTo':
                 findObject.price = { ...findObject.price, $lt: filterOptions[key] }
                 break;
 
             case 'priceObjectFrom':
+                findObject.price = { ...findObject.price, $gt: filterOptions[key] }
+                break;
+
+            case 'tenants':
                 findObject.price = { ...findObject.price, $gt: filterOptions[key] }
                 break;
 
