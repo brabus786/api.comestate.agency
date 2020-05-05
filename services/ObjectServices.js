@@ -33,7 +33,8 @@ const uploadObjectsToDB = async (crmObjectsJson) => {
     for (let i = 0; i < realties.length; i++) {
 
         let properties = realties[i].properties.property ? realties[i].properties.property : [];
-        console.log(properties.length);
+
+        console.log(properties);
 
         let metroStation = '';
         let distanceToMetro = '';
@@ -48,7 +49,7 @@ const uploadObjectsToDB = async (crmObjectsJson) => {
             if (attribute == 'property_54') rentalYield = properties[y]._text;
         }
 
-        console.log(distanceToMetro);
+        //console.log(distanceToMetro);
 
 
         const arr = realties[i].images.image_url;
@@ -72,7 +73,7 @@ const uploadObjectsToDB = async (crmObjectsJson) => {
             advert_type: realties[i].deal._text,
             state: realties[i].location.region._text,
             city: realties[i].location.city._text,
-            district: realties[i].location.district._text,
+            district: realties[i].location.district != undefined ?realties[i].location.district._text:null,
             street: realties[i].location.street._text,
             longitude: realties[i].location.map_lng != undefined ? realties[i].location.map_lng._text : null,
             latitude: realties[i].location.map_lat != undefined ? realties[i].location.map_lat._text : null,
@@ -101,7 +102,7 @@ const uploadObjectsToDB = async (crmObjectsJson) => {
 
     }
 
-    //console.log(arrObj);
+    console.log(arrObj);
 
     await ObjectModel.insertMany(arrObj, function (error, docs) {
         console.log(error);
