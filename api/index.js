@@ -14,7 +14,7 @@ router.get('/getCrm', async function (req, res) {
     objectServices.clearObjects();
     objectServices.uploadObjectsToDB(result);
     res.send(result);
-   console.log('finish')
+    console.log('finish')
 
 })
 
@@ -22,7 +22,7 @@ router.get('/getCrm', async function (req, res) {
 router.post('/test', async function (req, res) {
     const filterOptions = req.body;
     const page = req.query.page;
-    const perPage = 12;
+    const perPage = 48;
     const objects = await objectServices.listObjects(filterOptions, page, perPage);
 
     //console.log(objects);
@@ -33,7 +33,7 @@ router.post('/test', async function (req, res) {
 
 router.get('/object', async function (req, res) {
     objectServices.addView(req.query.id);
-    const object = await objectServices.listOneObject(req.query.id); 
+    const object = await objectServices.listOneObject(req.query.id);
     res.send(object);
 });
 
@@ -43,13 +43,13 @@ router.get('/similar', async function (req, res) {
     res.send(object);
 });
 
-router.get('/sitemap', async function(req, res){
+router.get('/sitemap', async function (req, res) {
     let xml = await objectServices.getXml();
     res.set('Content-Type', 'text/xml');
     res.send(xml);
 })
 
-router.get('/totalcount',async function(req, res){
+router.get('/totalcount', async function (req, res) {
     const getTotalCount = await objectServices.getTotalCount();
     //console.log(getTotalCount);
     res.send(getTotalCount);
