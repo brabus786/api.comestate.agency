@@ -12,7 +12,9 @@ const obj = {origin: '*'};
 app.use(cors(obj));
 app.use(express.json());
 app.use(router);
-app.listen(5000, () => {
+
+//5000
+app.listen(3001, () => {
     console.log('server runs on the port 3001');
 });
 

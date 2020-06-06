@@ -52,7 +52,7 @@ router.get('/sitemap', async function(req, res){
 router.get('/totalcount',async function(req, res){
     const getTotalCount = await objectServices.getTotalCount();
     //console.log(getTotalCount);
-    res.send(getTotalCount);
+    res.send(getTotalCount.toString());
 })
 
 module.exports = router;
