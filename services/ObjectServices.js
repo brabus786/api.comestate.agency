@@ -3,6 +3,10 @@ const convert = require('xml-js');
 const ObjectModel = require('../models/Object');
 
 
+const getAllObject = async () => {
+    const allObject = await ObjectModel.find();
+    return allObject;
+}
 
 
 const getTotalCount = async () => {
@@ -33,8 +37,6 @@ const uploadObjectsToDB = async (crmObjectsJson) => {
     for (let i = 0; i < realties.length; i++) {
 
         let properties = realties[i].properties.property ? realties[i].properties.property : [];
-
-        console.log(properties);
 
         let metroStation = '';
         let distanceToMetro = '';
@@ -68,6 +70,8 @@ const uploadObjectsToDB = async (crmObjectsJson) => {
         const area = realties[i].area_total ? parseInt(realties[i].area_total._text) : null;
 
         const obj = {
+            map_lat:realties[i].location.map_lat !== undefined? realties[i].location.map_lat._text: null,
+            map_lng:realties[i].location.map_lng !== undefined? realties[i].location.map_lng._text: null,
             local_realty_id: realties[i]._attributes['internal-id'],
             realty_type: realties[i].realty_type._text,
             advert_type: realties[i].deal._text,
@@ -288,4 +292,5 @@ module.exports = {
     clearObjects,
     getXml,
     getTotalCount,
+    getAllObject,
 };

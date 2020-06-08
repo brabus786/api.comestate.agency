@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const objectShema = new Schema({
+    map_lat:Number,
+    map_lng:Number,
     local_realty_id: Number,
     created_at:Number,
     realty_type: String,
