@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const objectShema = new Schema({
     local_realty_id: Number,
-    created_at:Number,
+    created_at: Number,
     realty_type: String,
     advert_type: String,
     state: String,
@@ -16,19 +16,22 @@ const objectShema = new Schema({
     description: String,
     photos_urls: Array,
     metro_station: String, //название метро
-    distance_to_metro:Number, //расстояние до метро
-    tenants:String, // есть арендаторы
-    rental_yield:String, // рентабельность
+    distance_to_metro: Number, //расстояние до метро
+    tenants: String, // есть арендаторы
+    rental_yield: String, // рентабельность
     created_at: String,
     wall_type: String,
     rooms_count: Number,
     total_area: Number,
     floor: Number,
-    floors:Number,
+    floors: Number,
     price: Number,
     price_type: String,
     currency: String,
-    views:Number,
+    views: {
+        default: 0,
+        type: Number
+    },
     pricePerSqure: Number,
 });
 

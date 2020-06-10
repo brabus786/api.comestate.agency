@@ -11,8 +11,8 @@ router.get('/filterInfo', async function (req, res) {
 router.get('/getCrm', async function (req, res) {
     console.log('start')
     const result = await objectServices.getObjectsFromCRM();
-    objectServices.clearObjects();
     objectServices.uploadObjectsToDB(result);
+    // objectServices.clearObjects();
     res.send(result);
     console.log('finish')
 

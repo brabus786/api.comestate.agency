@@ -26,15 +26,20 @@ const getObjectsFromCRM = () => {
 const clearObjects = async () => await ObjectModel.deleteMany();
 
 const uploadObjectsToDB = async (crmObjectsJson) => {
-    //const realties = JSON.parse(crmObjectsJson).realties.realty;
+    // const realties = JSON.parse(crmObjectsJson).realties.realty;
     const realties = JSON.parse(crmObjectsJson).response.item;
+
+    const views = await ObjectModel.find({}, 'views local_realty_id');
+    console.log(views);
+
+    await clearObjects();
 
     const arrObj = [];
     for (let i = 0; i < realties.length; i++) {
 
         let properties = realties[i].properties.property ? realties[i].properties.property : [];
 
-        console.log(properties);
+        // console.log(properties);
 
         let metroStation = '';
         let distanceToMetro = '';
@@ -73,7 +78,7 @@ const uploadObjectsToDB = async (crmObjectsJson) => {
             advert_type: realties[i].deal._text,
             state: realties[i].location.region._text,
             city: realties[i].location.city._text,
-            district: realties[i].location.district != undefined ?realties[i].location.district._text:null,
+            district: realties[i].location.district != undefined ? realties[i].location.district._text : null,
             street: realties[i].location.street._text,
             longitude: realties[i].location.map_lng != undefined ? realties[i].location.map_lng._text : null,
             latitude: realties[i].location.map_lat != undefined ? realties[i].location.map_lat._text : null,
@@ -93,7 +98,8 @@ const uploadObjectsToDB = async (crmObjectsJson) => {
             price: price,
             price_type: null,
             currency: realties[i].price._attributes.currency,
-            pricePerSqure: Math.round(price / area)
+            pricePerSqure: Math.round(price / area),
+            views: views.find(v => v.local_realty_id == realties[i]._attributes['internal-id']).views
         }
 
 
@@ -102,7 +108,7 @@ const uploadObjectsToDB = async (crmObjectsJson) => {
 
     }
 
-    console.log(arrObj);
+    // console.log(arrObj);
 
     await ObjectModel.insertMany(arrObj, function (error, docs) {
         console.log(error);
@@ -137,7 +143,7 @@ const listObjects = async (filterOptions, pageIndex, perPage) => {
                 break;
             case 'subwayDistance':
                 console.log(parseInt(filterOptions.subwayDistance));
-                findObject.distance_to_metro = { $lte:  parseInt(filterOptions.subwayDistance)};
+                findObject.distance_to_metro = { $lte: parseInt(filterOptions.subwayDistance) };
                 break;
             case 'tenants':
                 findObject.tenants = 'Да';
