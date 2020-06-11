@@ -76,6 +76,9 @@ const uploadObjectsToDB = async (crmObjectsJson) => {
         const price = realties[i].price ? parseInt(realties[i].price._text) : null;
         const area = realties[i].area_total ? parseInt(realties[i].area_total._text) : null;
 
+        const viewsCount = views.find(v => v.local_realty_id == realties[i]._attributes['internal-id']);
+        const newViews = viewsCount ? viewsCount.views : 0;
+
         const obj = {
             map_lat: realties[i].location.map_lat !== undefined ? realties[i].location.map_lat._text : null,
             map_lng: realties[i].location.map_lng !== undefined ? realties[i].location.map_lng._text : null,
@@ -105,7 +108,7 @@ const uploadObjectsToDB = async (crmObjectsJson) => {
             price_type: null,
             currency: realties[i].price._attributes.currency,
             pricePerSqure: Math.round(price / area),
-            views: views.find(v => v.local_realty_id == realties[i]._attributes['internal-id'])?.views
+            views: newViews
         }
 
 
