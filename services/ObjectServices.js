@@ -105,7 +105,7 @@ const uploadObjectsToDB = async (crmObjectsJson) => {
             price_type: null,
             currency: realties[i].price._attributes.currency,
             pricePerSqure: Math.round(price / area),
-            views: views.find(v => v.local_realty_id == realties[i]._attributes['internal-id']).views
+            views: views.find(v => v.local_realty_id == realties[i]._attributes['internal-id'])?.views
         }
 
 
