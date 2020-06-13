@@ -55,6 +55,11 @@ router.get('/totalcount', async function (req, res) {
     res.send(getTotalCount);
 })
 
+router.get('/getAllObject', async function (req, res) {
+    const getAllObject = await objectServices.getAllObject();
+     res.send(getAllObject);
+ })
+
 module.exports = router;
 
 
