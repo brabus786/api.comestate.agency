@@ -34,16 +34,15 @@ const uploadObjectsToDB = async (crmObjectsJson) => {
     const realties = JSON.parse(crmObjectsJson).response.item;
 
     const views = await ObjectModel.find({}, 'views local_realty_id');
-    console.log(views);
+    // console.log(views);
 
     await clearObjects();
 
     const arrObj = [];
     for (let i = 0; i < realties.length; i++) {
 
-        let properties = realties[i].properties.property ? realties[i].properties.property : [];
 
-        // console.log(properties);
+        let properties = realties[i].properties.property ? realties[i].properties.property : [];  
 
         let metroStation = '';
         let distanceToMetro = '';
@@ -58,18 +57,25 @@ const uploadObjectsToDB = async (crmObjectsJson) => {
             if (attribute == 'property_54') rentalYield = properties[y]._text;
         }
 
-        //console.log(distanceToMetro);
+       
+
+        let arr = [];
+
+        if(realties[i].images.image_url instanceof Array){
+            arr = realties[i].images.image_url;
+        }else{
+            arr.push(realties[i].images.image_url !== undefined? realties[i].images.image_url: {_text:null});
+        }
 
 
-        const arr = realties[i].images.image_url;
         const arrIMG = [];
         if (arr != undefined) {
             for (s = 0; s < arr.length; s++) {
                 const linkIMG = arr[s]._text;
-                //console.log(arr[s]._text);
                 arrIMG.push(linkIMG);
             }
         }
+       
 
         // console.log(realties[i]);
 
@@ -134,7 +140,7 @@ const listObjects = async (filterOptions, pageIndex, perPage) => {
         property_pype: 'realty_type',
         objectId: 'local_realty_id'
     }
-    console.log(filterOptions);
+    // console.log(filterOptions);
     const findObject = {};
     for (let key in filterOptions) {
         const dbKeyName = filterMap[key]
@@ -147,11 +153,11 @@ const listObjects = async (filterOptions, pageIndex, perPage) => {
                 findObject.district = { $in: filterOptions.district }
                 break;
             case 'subway':
-                console.log(filterOptions.subway);
+                // console.log(filterOptions.subway);
                 findObject.metro_station = { $in: filterOptions.subway }
                 break;
             case 'subwayDistance':
-                console.log(parseInt(filterOptions.subwayDistance));
+                // console.log(parseInt(filterOptions.subwayDistance));
                 findObject.distance_to_metro = { $lte: parseInt(filterOptions.subwayDistance) };
                 break;
             case 'tenants':
